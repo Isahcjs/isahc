@@ -1,0 +1,33 @@
+{
+  "name": "isahc",
+  "version": "1.0.0",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs && npm run rename:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "rename:cjs": "find dist/cjs -name '*.js' -exec sh -c 'sed -i \"s/\\.js/\\.cjs/g\" \"$1\" && mv \"$1\" \"${1%.js}.cjs\"' _ {} \\;",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'node --loader ts-node/esm' src/index.ts",
+    "start": "node dist/cjs/index.cjs && node server.cjs",
+    "prepublishOnly": "npm run build"
+  },
+  "license": "Apache-2.0",
+  "author": "OpenDevsFlow <iscordian.dev@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}
